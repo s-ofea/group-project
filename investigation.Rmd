@@ -17,7 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, message = FALSE}
 library(tidyverse)
 # Add any other libraries here
-
+install.packages("readr")
+library(readr)
 
 
 ```
@@ -25,10 +26,18 @@ library(tidyverse)
 
 ```{r load-data}
 # load your data 
+getwd()
+
+nhs_data <- read.csv("data/hd_activitybyca.csv")
+nhs_data2 <- read.csv("data/hd_activitybyhbr.csv")
 
 
 
 
+```
+```{r}
+# data cleaning
+sum(duplicated(nhs_data))
 ```
 
 
