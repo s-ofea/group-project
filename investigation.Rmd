@@ -24,7 +24,7 @@ library(readr)
 ```
 
 
-```{r load-data}
+```{r load-data1}
 # load your data 
 getwd()
 
@@ -33,11 +33,13 @@ nhs_data <- read.csv("data/hd_mortalitybyca.csv")
 ```
 
 
-```{r load-data}
+```{r load-data2}
 # cleaning data
 hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
 print(hd_mortalitybyca)
+
+
 ```
 
 
-```{r load-data}
+```{r load-data3}
