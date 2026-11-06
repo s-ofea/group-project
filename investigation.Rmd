@@ -35,8 +35,8 @@ nhs_data <- read.csv("data/hd_mortalitybyca.csv")
 
 ```{r load-data}
 # cleaning data
-hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Ca", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
-print(nhs_data)
+hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
+print(hd_mortalitybyca)
 ```
 
 
