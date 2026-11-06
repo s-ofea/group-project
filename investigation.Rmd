@@ -36,6 +36,8 @@ hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 # cleaning data
 hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
 
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter( Year == "2023")
 
 ```
 
