@@ -28,16 +28,16 @@ library(readr)
 # load your data 
 getwd()
 
-nhs_data <- read.csv("data/hd_activitybyca.csv")
-nhs_data2 <- read.csv("data/hd_activitybyhbr.csv")
-
-
-
+nhs_data <- read.csv("data/hd_mortalitybyca.csv")
 
 ```
-```{r}
-# data cleaning
-sum(duplicated(nhs_data))
+
+
+```{r load-data}
+# cleaning data
+hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Ca", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
+print(nhs_data)
 ```
 
 
+```{r load-data}
