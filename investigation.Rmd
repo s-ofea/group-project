@@ -17,27 +17,30 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, message = FALSE}
 library(tidyverse)
 # Add any other libraries here
-install.packages("readr")
-library(readr)
+
 
 
 ```
 
 
-```{r load-data}
+```{r load-data1}
 # load your data 
 getwd()
 
-nhs_data <- read.csv("data/hd_mortalitybyca.csv")
+hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 
 ```
 
 
-```{r load-data}
+```{r load-data2}
 # cleaning data
 hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
-print(hd_mortalitybyca)
+
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter( Year == "2023")
+
+
 ```
 
 
-```{r load-data}
+```{r load-data3}
