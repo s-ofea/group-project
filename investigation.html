@@ -11,7 +11,7 @@
 
 <meta name="author" content="by Team-Name: Tanvee, Tyra, Asini, Sofea" />
 
-<meta name="date" content="2026-11-06" />
+<meta name="date" content="2026-11-08" />
 
 <title>IDS investigation worksheet</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">IDS investigation worksheet</h1>
 <h4 class="author">by Team-Name: Tanvee, Tyra, Asini, Sofea</h4>
-<h4 class="date">2026-11-06</h4>
+<h4 class="date">2026-11-08</h4>
 
 </div>
 
@@ -366,16 +366,24 @@ creating your presentation and report easier. Please note that you
 <em>do not</em> need to submit this file as part of your group
 project.</p>
 <pre class="r"><code>library(tidyverse)
-# Add any other libraries here</code></pre>
+# Add any other libraries here
+library(dplyr)</code></pre>
 <pre class="r"><code># load your data 
 getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/tyratan/group_project&quot;</code></pre>
+<pre><code>## [1] &quot;C:/Users/USER/OneDrive/ドキュメント/group-project&quot;</code></pre>
 <pre class="r"><code>hd_mortalitybyca&lt;- read.csv(&quot;data/hd_mortalitybyca.csv&quot;)</code></pre>
 <pre class="r"><code># cleaning data
 hd_mortalitybyca &lt;- hd_mortalitybyca [, c(&quot;Year&quot;, &quot;AgeGroup&quot;, &quot;Sex&quot;, &quot;Diagnosis&quot;, &quot;NumberOfDeaths&quot;, &quot;CrudeRate&quot;)]
 
 hd_mortalitybyca &lt;- hd_mortalitybyca %&gt;%
   filter( Year == &quot;2023&quot;, Diagnosis == &quot;Coronary Heart Disease&quot;)</code></pre>
+<pre class="r"><code>#grouping by gender &amp; age group
+hd_mortalitybyca &lt;- hd_mortalitybyca %&gt;%
+  mutate( Sex = case_when(
+    Sex %in% c(&quot;Female&quot;) ~ &quot;Female&quot;,
+    Sex %in% c(&quot;Male&quot;) ~ &quot;Male&quot;,
+    TRUE ~ Sex
+  ))</code></pre>
 
 
 

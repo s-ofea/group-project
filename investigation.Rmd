@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-lib, message = FALSE}
 library(tidyverse)
 # Add any other libraries here
-
+library(dplyr)
 
 
 ```
@@ -44,3 +44,12 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 
 
 ```{r load-data3}
+
+#grouping by gender & age group
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  mutate( Sex = case_when(
+    Sex %in% c("Female") ~ "Female",
+    Sex %in% c("Male") ~ "Male",
+    TRUE ~ Sex
+  ))
+
