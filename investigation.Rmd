@@ -44,12 +44,14 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 
 
 ```{r load-data3}
-
 #grouping by gender & age group
 hd_mortalitybyca <- hd_mortalitybyca %>%
-  mutate( Sex = case_when(
-    Sex %in% c("Female") ~ "Female",
-    Sex %in% c("Male") ~ "Male",
-    TRUE ~ Sex
-  ))
+  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years"))
 
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter(Sex != "All") %>%
+  arrange(Sex)
+```
+
+
+```{r load-data4}
