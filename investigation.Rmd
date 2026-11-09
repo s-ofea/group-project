@@ -46,7 +46,8 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 ```{r load-data3}
 #grouping by gender & age group
 hd_mortalitybyca <- hd_mortalitybyca %>%
-  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years"))
+  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years")) %>%
+  arrange(AgeGroup)
 
 hd_mortalitybyca <- hd_mortalitybyca %>%
   filter(Sex != "All") %>%

@@ -379,7 +379,8 @@ hd_mortalitybyca &lt;- hd_mortalitybyca %&gt;%
   filter( Year == &quot;2023&quot;, Diagnosis == &quot;Coronary Heart Disease&quot;)</code></pre>
 <pre class="r"><code>#grouping by gender &amp; age group
 hd_mortalitybyca &lt;- hd_mortalitybyca %&gt;%
-  filter(AgeGroup %in% c(&quot;0-44 years&quot;, &quot;45-64 years&quot;, &quot;65-74 years&quot;))
+  filter(AgeGroup %in% c(&quot;0-44 years&quot;, &quot;45-64 years&quot;, &quot;65-74 years&quot;)) %&gt;%
+  arrange(AgeGroup)
 
 hd_mortalitybyca &lt;- hd_mortalitybyca %&gt;%
   filter(Sex != &quot;All&quot;) %&gt;%
