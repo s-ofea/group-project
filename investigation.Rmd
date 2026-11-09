@@ -55,3 +55,4 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 
 
 ```{r load-data4}
+#bar plotting
