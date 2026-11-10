@@ -57,21 +57,22 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 
 
 ```{r load-data4}
-#problem screating bar plot for 
-hd_mortality_male <- hd_mortalitybyca %>%
-  filter(Sex == "Male") %>%
-  group_by(AgeGroup) %>%
+#creating bar plot
+hd_mortality_gender <- hd_mortalitybyca %>%
+  group_by(AgeGroup, Sex) %>%
   summarise(total_deaths = sum(NumberOfDeaths, na.rm = TRUE)
   )
   
-ggplot(data = hd_mortality_male,
-       aes(x = total_deaths,
-           y = AgeGroup)) +
-  geom_col() +
+ggplot(data = hd_mortality_gender,
+       mapping = aes(x = AgeGroup,
+                     y = total_deaths,
+                     fill = Sex)) +
+  geom_col(position = "dodge") +
   labs(
     x = "Number of Deaths",
     y = "Age Groups",
-    title = "Total Number of Deaths by Age Groups in 2023 (Males)"
+    title = "Total Number of Deaths from all Council Areas", 
+    subtitle = "Sorted by Gender"
   ) +
-  theme_minimal()
+  theme_minimal() 
 ```
