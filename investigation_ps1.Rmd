@@ -34,10 +34,10 @@ hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 
 ```{r load-data2}
 # cleaning data
-hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate")]
+hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
 
 hd_mortalitybyca <- hd_mortalitybyca %>%
-  filter( Year == "2023", Diagnosis == "Coronary Heart Disease")
+  filter( Diagnosis == "Coronary Heart Disease", Ca != "S92000003")
 
 
 ```
@@ -57,6 +57,7 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 
 
 ```{r load-data4}
+#problem screating bar plot for 
 hd_mortality_male <- hd_mortalitybyca %>%
   filter(Sex == "Male") %>%
   group_by(AgeGroup) %>%
