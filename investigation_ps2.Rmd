@@ -28,5 +28,15 @@ library(dplyr)
 getwd()
 
 hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
+```
 
+
+```{r load-data2}
+hd_mortalitybyca %>%
+filter(
+  Year != "2024p", Ca == "S92000003",
+  Diagnosis == "Coronary Heart Disease",
+  AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years", "75plus years"),
+  Sex == "All") %>%
+  ggplot(aes(x = Year, y = CrudeRate, colour = AgeGroup)) + geom_point()
 ```
