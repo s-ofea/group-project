@@ -32,6 +32,28 @@ hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 ```
 
 ```{r load-data2}
+# 1. one year, all ages, both sexes 
+hd_total2015 <- hd_mortalitybyca %>% 
+  filter(Year == 2015, 
+         AgeGroup == "All Ages", 
+         Sex == "All",
+         Diagnosis == "Coronary Heart Disease") 
 
+# 2. National rate  (Scotland total row) 
+scotland_rate <- hd_total2015 %>% 
+  filter(Ca == "S92000003") %>% 
+  pull(CrudeRate) 
+
+# 3.  above/below national 
+hd_councils <- hd_total2015 %>% 
+  filter(Diagnosis == "Coronary Heart Disease", Ca != "S92000003") %>%
+  mutate(national_rate = scotland_rate,
+         difference = CrudeRate - national_rate, 
+         status = if_else(CrudeRate > national_rate, "Above national", "Below national")) 
+
+council_area_rate <- hd_councils %>% 
+  select(national_rate, difference, status, Ca) 
+
+view(council_area_rate) 
 
 ```
