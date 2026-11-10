@@ -1,7 +1,7 @@
 ---
 title: "Scottish Heart Diseases"
 subtitle: "Presentation subtitle (if any)"
-author: " <br> Names of team members"
+author: "Asini, Tyra, Tanvee, Sofea"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
@@ -40,6 +40,9 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 ```{r load-data, include=FALSE}
 # Load your data here
+install.packages("readr")
+library(readr)
+
 
 ```
 
@@ -86,8 +89,39 @@ class: inverse, middle, center
 --
 
 - Like this
+#Presentation Introduction
 
+Welcome to our presentation!
 ---
+
+Problem Statement:
+
+
+----
+
+
+```{r}
+#1st bar plot
+#creating bar plot
+hd_mortality_gender <- hd_mortalitybyca %>%
+  group_by(AgeGroup, Sex) %>%
+  summarise(total_deaths = sum(NumberOfDeaths, na.rm = TRUE)
+  )
+  
+ggplot(data = hd_mortality_gender,
+       mapping = aes(x = AgeGroup,
+                     y = total_deaths,
+                     fill = Sex)) +
+  geom_col(position = "dodge") +
+  labs(
+    x = "Number of Deaths",
+    y = "Age Groups",
+    title = "Number of Deaths from all Council Areas", 
+    subtitle = "By "
+  ) +
+  theme_minimal() 
+  
+```
 
 # Layouts
 
