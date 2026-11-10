@@ -1,5 +1,5 @@
 ---
-title: "IDS investigation worksheet"
+title: "investigation_ps1"
 author: "by Team-Name: Tanvee, Tyra, Asini, Sofea"
 date: "`r Sys.Date()`"
 output: html_document
@@ -76,3 +76,5 @@ ggplot(data = hd_mortality_gender,
   ) +
   theme_minimal() 
 ```
+
+
