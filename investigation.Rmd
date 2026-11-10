@@ -46,14 +46,31 @@ hd_mortalitybyca <- hd_mortalitybyca %>%
 ```{r load-data3}
 #grouping by gender & age group
 hd_mortalitybyca <- hd_mortalitybyca %>%
-  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years")) %>%
+  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years", "75plus years")) %>%
   arrange(AgeGroup)
 
 hd_mortalitybyca <- hd_mortalitybyca %>%
   filter(Sex != "All") %>%
   arrange(Sex)
+
 ```
 
 
 ```{r load-data4}
-#bar plotting
+hd_mortality_male <- hd_mortalitybyca %>%
+  filter(Sex == "Male") %>%
+  group_by(AgeGroup) %>%
+  summarise(total_deaths = sum(NumberOfDeaths, na.rm = TRUE)
+  )
+  
+ggplot(data = hd_mortality_male,
+       aes(x = total_deaths,
+           y = AgeGroup)) +
+  geom_col() +
+  labs(
+    x = "Number of Deaths",
+    y = "Age Groups",
+    title = "Total Number of Deaths by Age Groups in 2023 (Males)"
+  ) +
+  theme_minimal()
+```
