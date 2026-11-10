@@ -1,0 +1,81 @@
+---
+title: "IDS investigation worksheet"
+author: "by Team-Name: Tanvee, Tyra, Asini, Sofea"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+**Note:** You can use this file as you 'working document' where you can try out various investigation ideas and keep notes about your findings. How you use and structure this file is up to you. It is recommended that you keep notes about what you are investigating and what you find as this will make the process of creating your presentation and report easier. Please note that you _do not_ need to submit this file as part of your group project.
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-lib, message = FALSE}
+library(tidyverse)
+# Add any other libraries here
+library(dplyr)
+
+
+```
+
+
+```{r load-data1}
+# load your data 
+getwd()
+
+hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
+
+```
+
+
+```{r load-data2}
+# cleaning data
+hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
+
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter( Diagnosis == "Coronary Heart Disease", Ca != "S92000003")
+
+
+```
+
+
+```{r load-data3}
+#grouping by gender & age group
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter(AgeGroup %in% c("0-44 years", "45-64 years", "65-74 years", "75plus years")) %>%
+  arrange(AgeGroup)
+
+hd_mortalitybyca <- hd_mortalitybyca %>%
+  filter(Sex != "All") %>%
+  arrange(Sex)
+
+```
+
+
+```{r load-data4}
+#creating bar plot
+hd_mortality_gender <- hd_mortalitybyca %>%
+  group_by(AgeGroup, Sex) %>%
+  summarise(total_deaths = sum(NumberOfDeaths, na.rm = TRUE)
+  )
+  
+ggplot(data = hd_mortality_gender,
+       mapping = aes(x = AgeGroup,
+                     y = total_deaths,
+                     fill = Sex)) +
+  geom_col(position = "dodge") +
+  labs(
+    x = "Number of Deaths",
+    y = "Age Groups",
+    title = "Number of Deaths from all Council Areas", 
+    subtitle = "By "
+  ) +
+  theme_minimal() 
+```
+
+
+
