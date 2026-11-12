@@ -57,3 +57,27 @@ council_area_rate <- hd_councils %>%
 view(council_area_rate) 
 
 ```
+```
+
+```
+```{r}
+ggplot(council_area_rate, aes(x = difference)) +
+  geom_histogram(
+    binwidth = 15,
+    fill = "skyblue",
+    colour = "black"
+  ) +
+  geom_vline(
+    xintercept = 0,
+    colour = "red",
+    linetype = "dashed",
+    linwidth = 3
+  ) +
+  labs (
+    title = "DIstribution of Differences",
+    x = "Difference from National Rate",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
+
