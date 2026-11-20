@@ -43,19 +43,45 @@ hd_mortality_year
 ```
 
 ```{r load-data3}
-mortality_year_fit <- linear_reg() %>%
+mortality_female_fit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(CrudeRate ~ Year, data = hd_mortality_year) 
-mortality_year_fit
+  fit(CrudeRate ~ Year, 
+      data = hd_mortality_year %>% filter(Sex == "Female")) 
 
-mortality_year_fit_tidy <- tidy(mortality_year_fit$fit)
-mortality_year_fit_aug <- augment(mortality_year_fit$fit) %>%
+mortality_male_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(CrudeRate ~ Year, 
+      data = hd_mortality_year %>% filter(Sex == "Male")) 
+
+mortality_male_fit
+mortality_female_fit
+
+mortality_female_aug <- augment(mortality_female_fit$fit) %>%
+                                mutate(Sex = "Female")
+
+mortality_male_aug <- augment(mortality_male_fit$fit) %>%
+                                mutate(Sex = "Male")
+
+mortality_year_fit_aug <- bind_rows(
+  mortality_female_aug,
+  mortality_male_aug
+) %>%
   mutate(residual = ifelse(.resid >0, TRUE, FALSE))
+
 
 ggplot(data = mortality_year_fit_aug) + 
  geom_point(aes(x = Year, y = CrudeRate, color = residual)) +
   geom_line(aes(x = Year, y = .fitted), linewidth = 0.75) +
-  geom_point(mapping = aes(x = Year,y = .fitted), color = "hotpink")+
+  geom_point(mapping = aes(x = Year,y = .fitted), color = "purple")+
   geom_segment(mapping = aes(x = Year, y = CrudeRate,
-                             xend = Year, yend = .fitted), color = "hotpink", alpha = 0.4)
+                             xend = Year, yend = .fitted), color = "purple", alpha = 0.2) +
+  labs(
+    title = "Coronary Heart Disease Mortality Rates in Scotland (2015-2023)",
+    subtitle = "For ages 75 years and above",
+    x = "Year (2015-2023)",
+    y = "Crude Rate (per 100,000 population)",
+  ) +
+  facet_wrap(~Sex, scales = "free_y", axes = "all") +
+  theme_minimal() +
+  scale_colour_manual(values = c("hotpink", "forestgreen")) 
 ```
