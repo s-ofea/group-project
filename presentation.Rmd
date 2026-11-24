@@ -1,6 +1,5 @@
 ---
 title: "Scottish Heart Diseases"
-subtitle: "Presentation subtitle (if any)"
 author: "Asini, Tyra, Tanvee, Sofea"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -21,6 +20,7 @@ output:
 # the `xaringan` package that contains all of the code which allows you 
 # to create presentation slides in Rmarkdown
 install.packages('xaringan')
+install.packages("kableExtra")
 ```
 
 
@@ -28,8 +28,9 @@ install.packages('xaringan')
 # Add any additional packages you need to this chunk
 library(tidyverse)
 library(tidymodels)
-library(palmerpenguins)
+library(dplyr)
 library(knitr)
+library(kableExtra)
 library(xaringanthemer)
 ```
 
@@ -40,116 +41,100 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 ```{r load-data, include=FALSE}
 # Load your data here
-install.packages("readr")
 library(readr)
 
+hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 
 ```
 
-```{r include=FALSE}
-
-#Background image
-style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
-)
-```
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## Data Analysis and Investigations on Mortality Rates in Scotland due to Coronary Heart Disease
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+# Problem Statement 1: 
+What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
 
 ---
+class: center, middle
 
-# Hello World
-
-- Click the `Knit` button to compile your presentation
-
-- Make sure to commit and push all resulting files to your GitHub repo
+# Problem Statement 1: 
+What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
 
 ---
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
+#Tidying Data
 --
-
-- Like this
-#Presentation Introduction
-
-Welcome to our presentation!
----
-
-Problem Statement:
-
-
-----
-
-
 ```{r}
-#1st bar plot
-#creating bar plot
-hd_mortality_gender <- hd_mortalitybyca %>%
-  group_by(AgeGroup, Sex) %>%
-  summarise(total_deaths = sum(NumberOfDeaths, na.rm = TRUE)
-  )
-  
-ggplot(data = hd_mortality_gender,
-       mapping = aes(x = AgeGroup,
-                     y = total_deaths,
-                     fill = Sex)) +
-  geom_col(position = "dodge") +
-  labs(
-    x = "Number of Deaths",
-    y = "Age Groups",
-    title = "Number of Deaths from all Council Areas", 
-    subtitle = "By "
-  ) +
-  theme_minimal() 
-  
+#Selecting necessary columns from the dataset
+hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
+
+```
+--
+```{r}
+#Filtering and tidying the specific data
+hd_mortality_year <- hd_mortalitybyca %>% 
+  filter(
+  Year != "2024p", 
+  Ca == "S92000003",
+  Diagnosis == "Coronary Heart Disease",
+  AgeGroup %in% c("75plus years"),
+  Sex != "All") %>%
+    mutate(Year = as.numeric(Year)) %>%
+  arrange(Sex)
 ```
 
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
+---
+```{r}
+hd_mortality_year
+```
+--
+```{r, include=FALSE}
+hd_mortality_year %>%
+  kable() %>%
+  kable_styling(
+    font_size = 10,
+    full_width = FALSE
+  )
+```
 ---
 
 # Code
+```{r}
+mortality_female_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(CrudeRate ~ Year, 
+      data = hd_mortality_year %>% filter(Sex == "Female")) 
 
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+mortality_male_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(CrudeRate ~ Year, 
+      data = hd_mortality_year %>% filter(Sex == "Male")) 
+```
+---
+```{r}
+mortality_male_fit
+```
+--
+```{r}
+mortality_female_fit
+```
+---
+```{r}
+mortality_female_aug <- augment(mortality_female_fit$fit) %>%
+                                mutate(Sex = "Female")
+
+mortality_male_aug <- augment(mortality_male_fit$fit) %>%
+                                mutate(Sex = "Male")
+
+mortality_year_fit_aug <- bind_rows(
+  mortality_female_aug,
+  mortality_male_aug
+) %>%
+  mutate(residual = ifelse(.resid >0, TRUE, FALSE))
 ```
 
 ---
