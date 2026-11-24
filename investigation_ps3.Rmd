@@ -92,8 +92,8 @@ change_df <- hd %>%
          AgeGroup == "All Ages", Sex == "All",
          Diagnosis == "Coronary Heart Disease",
          Ca != "S92000003") %>%
-  select(Ca, Year, EASR) %>%
-  pivot_wider(names_from = Year, values_from = EASR, names_prefix = "y") %>%
+  select(Ca, Year, CrudeRate) %>%
+  pivot_wider(names_from = Year, values_from = CrudeRate, names_prefix = "y") %>%
   mutate(change = y2023 - y2015)
 
 ggplot(change_df, aes(x = change, y = reorder(Ca, change))) +
