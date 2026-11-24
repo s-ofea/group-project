@@ -84,4 +84,20 @@ ggplot(data = mortality_year_fit_aug) +
   facet_wrap(~Sex, scales = "free_y", axes = "all") +
   theme_minimal() +
   scale_colour_manual(values = c("hotpink", "forestgreen")) 
+
+
+
+ggplot(mortality_year_fit_aug, aes(x = .fitted, y = .resid, colour = Sex)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "darkgray") +
+  labs(
+    x = "Predicted Mortality Rate",
+    y = "Residuals",
+    title = "Residuals vs Predicted (2015-2023)",
+    subtitle = " For ages 75 years and above"
+  ) +
+  facet_wrap(~Sex, scales = "free", axes = "all") +
+  theme_minimal()
+
+
 ```
