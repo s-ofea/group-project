@@ -92,15 +92,15 @@ change_df <- hd %>%
          AgeGroup == "All Ages", Sex == "All",
          Diagnosis == "Coronary Heart Disease",
          Ca != "S92000003") %>%
-  select(Ca, Year, CrudeRate) %>%
-  pivot_wider(names_from = Year, values_from = CrudeRate, names_prefix = "y") %>%
+  select(Ca, Year, EASR) %>%
+  pivot_wider(names_from = Year, values_from = EASR, names_prefix = "y") %>%
   mutate(change = y2023 - y2015)
 
 ggplot(change_df, aes(x = change, y = reorder(Ca, change))) +
   geom_col(fill = "red") +
   labs(title = "Change in CHD death rate by council area, 2015 to 2023",
        subtitle = "Age-standardised rate per 100,000 (negative = improvement)",
-       x = "Change in rate", y = NULL) +
+       x = "Change in age-standardised rate per 100,000", y = NULL) +
   theme_minimal()
 
 ```
