@@ -56,27 +56,22 @@ class: center, middle
 
 class: inverse, center, middle
 
-# Problem Statement 1: 
+## Problem Statement 1: 
 What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
-
----
-class: center, middle
-
-# Problem Statement 1: 
-What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
-
 ---
 #Tidying Data
 --
 ```{r}
 #Selecting necessary columns from the dataset
-hd_mortalitybyca <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
+
+hd_mortality <- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
 
 ```
 --
 ```{r}
 #Filtering and tidying the specific data
-hd_mortality_year <- hd_mortalitybyca %>% 
+
+hd_mortality_year <- hd_mortality %>% 
   filter(
   Year != "2024p", 
   Ca == "S92000003",
@@ -86,24 +81,15 @@ hd_mortality_year <- hd_mortalitybyca %>%
     mutate(Year = as.numeric(Year)) %>%
   arrange(Sex)
 ```
-
 ---
 ```{r}
 hd_mortality_year
 ```
---
-```{r, include=FALSE}
-hd_mortality_year %>%
-  kable() %>%
-  kable_styling(
-    font_size = 10,
-    full_width = FALSE
-  )
-```
 ---
 
-# Code
+# Codes
 ```{r}
+#Creating linear regression models
 mortality_female_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(CrudeRate ~ Year, 
@@ -118,7 +104,7 @@ mortality_male_fit <- linear_reg() %>%
 ```{r}
 mortality_male_fit
 ```
---
+
 ```{r}
 mortality_female_fit
 ```
@@ -138,27 +124,67 @@ mortality_year_fit_aug <- bind_rows(
 ```
 
 ---
-
 # Plots
-
 ```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
+ggplot(data = mortality_year_fit_aug) + 
+ geom_point(aes(x = Year, y = CrudeRate, color = residual)) +
+  geom_line(aes(x = Year, y = .fitted), linewidth = 0.75) +
+  geom_point(mapping = aes(x = Year,y = .fitted), color = "purple")+
+  geom_segment(mapping = aes(x = Year, y = CrudeRate,
+                             xend = Year, yend = .fitted), color = "purple", alpha = 0.2) +
+  labs(
+    title = "Coronary Heart Disease Mortality Rates in Scotland (2015-2023)",
+    subtitle = "For ages 75 years and above",
+    x = "Year (2015-2023)",
+    y = "Crude Rate (per 100,000 population)",
+  ) +
+  facet_wrap(~Sex, scales = "free_y", axes = "all") +
+  theme_minimal() +
+  scale_colour_manual(values = c("hotpink", "forestgreen"))
 ```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
+---
+#Observations
+- 
 ---
 
+class: inverse, center, middle
+
+## Problem Statement 2: 
+Identifying which areas have seen the largest and smallest changes, and whether any areas have seen no improvement, to show where progress has been uneven. 
+---
+
+#Tidying Data 
+```{r}
+# Filtering for 2015 data 
+hd_total2015 <- hd_mortalitybyca %>% 
+  filter(Year == 2015, 
+         AgeGroup == "All Ages", 
+         Sex == "All",
+         Diagnosis == "Coronary Heart Disease")
+```
+--
+```{r}
+#Finding out the national rate 
+scotland_rate <- hd_total2015 %>% 
+  filter(Ca == "S92000003") %>% 
+  pull(CrudeRate) 
+```
+---
+```{r}
+#Identifying whether it is above or below the national rate  
+hd_councils <- hd_total2015 %>% 
+  filter(Diagnosis == "Coronary Heart Disease", Ca != "S92000003") %>%
+  mutate(national_rate = scotland_rate,
+         difference = CrudeRate - national_rate, 
+         status = if_else(CrudeRate > national_rate, "Above national", "Below national")) 
+
+council_area_rate <- hd_councils %>% 
+  select(national_rate, difference, status, Ca) 
+
+glimpse(council_area_rate) 
+
+```
+---
 ## Plot and text
 
 .pull-left[
@@ -202,34 +228,3 @@ class: inverse, center, middle
 background-image: url(img/edinburgh-castle.jpg)
 background-size: contain
 ---
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcome to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
