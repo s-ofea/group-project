@@ -1,5 +1,5 @@
----
-title: "Project title"
+
+title: ""Coronary Heart Disease Mortality Across Scottish Council Areas"
 author: "by Team-Name: Tyra, Tanvee, Asini, Sofea"
 date: "`r Sys.Date()`"
 output: html_document
@@ -57,10 +57,27 @@ If you got your data off the web, make sure to state the retrieval date.
 ```{r}
 # exploring dataset
 
+hd <- hd_mortalitybyca %>%
+  mutate(provisional = str_detect(Year, "p$"),
+         Year = as.integer(str_remove(Year, "p")))
 
-mean(hd_mortalitybyca$EASR, na.rm = TRUE)
-median(hd_mortalitybyca$EASR, na.rm = TRUE)
-sd(hd_mortalitybyca$EASR, na.rm = TRUE)
+glimpse(hd)
+summary(hd)
+colSums(is.na(hd))
+count(hd, Diagnosis)
+count(hd, AgeGroup)
+count(hd, Ca)
+
+hd %>% filter(AgeGroup == "All Ages", Sex == "All", Ca != "S92000003") %>%
+  ggplot(aes(CrudeRate)) + geom_histogram(bins = 30) + facet_wrap(~Diagnosis, scales = "free")
+
+hd %>% filter(Ca == "S92000003", AgeGroup == "All Ages", Sex == "All") %>%
+  ggplot(aes(Year, CrudeRate, colour = Diagnosis)) + geom_line()
+
+
+mean(hd_mortalitybyca$CrudeRate, na.rm = TRUE)
+median(hd_mortalitybyca$CrudeRate, na.rm = TRUE)
+sd(hd_mortalitybyca$CrudeRate, na.rm = TRUE)
 
 dataset_table <- data.frame(
   Variable = names(hd_mortalitybyca),
