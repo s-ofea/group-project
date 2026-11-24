@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 # Add any other libraries here
 library(dplyr)
+library(tidymodels)
 
 
 ```
@@ -42,7 +43,7 @@ hd_total2015 <- hd_mortalitybyca %>%
 # 2. National rate  (Scotland total row) 
 scotland_rate <- hd_total2015 %>% 
   filter(Ca == "S92000003") %>% 
-  pull(CrudeRate) 
+  pull(EASR) 
 
 # 3.  above/below national 
 hd_councils <- hd_total2015 %>% 
@@ -63,7 +64,7 @@ view(council_area_rate)
 ```{r}
 ggplot(council_area_rate, aes(x = difference)) +
   geom_histogram(
-    binwidth = 15,
+    binwidth = 10,
     fill = "skyblue",
     colour = "black"
   ) +
@@ -71,7 +72,7 @@ ggplot(council_area_rate, aes(x = difference)) +
     xintercept = 0,
     colour = "red",
     linetype = "dashed",
-    linwidth = 3
+    linewidth = 1.5
   ) +
   labs (
     title = "DIstribution of Differences",
@@ -79,5 +80,28 @@ ggplot(council_area_rate, aes(x = difference)) +
     y = "Frequency"
   ) +
   theme_minimal()
+```
+
+```{r}
+
+hd <- hd_mortalitybyca %>%
+  mutate(Year = as.integer(str_remove(Year, "p")))
+
+change_df <- hd %>%
+  filter(Year %in% c(2015, 2023),
+         AgeGroup == "All Ages", Sex == "All",
+         Diagnosis == "Coronary Heart Disease",
+         Ca != "S92000003") %>%
+  select(Ca, Year, EASR) %>%
+  pivot_wider(names_from = Year, values_from = EASR, names_prefix = "y") %>%
+  mutate(change = y2023 - y2015)
+
+ggplot(change_df, aes(x = change, y = reorder(Ca, change))) +
+  geom_col(fill = "red") +
+  labs(title = "Change in CHD death rate by council area, 2015 to 2023",
+       subtitle = "Age-standardised rate per 100,000 (negative = improvement)",
+       x = "Change in rate", y = NULL) +
+  theme_minimal()
+
 ```
 
