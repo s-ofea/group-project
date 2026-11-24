@@ -43,7 +43,7 @@ hd_total2015 <- hd_mortalitybyca %>%
 # 2. National rate  (Scotland total row) 
 scotland_rate <- hd_total2015 %>% 
   filter(Ca == "S92000003") %>% 
-  pull(EASR) 
+  pull(CrudeRate) 
 
 # 3.  above/below national 
 hd_councils <- hd_total2015 %>% 
