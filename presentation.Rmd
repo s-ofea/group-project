@@ -58,6 +58,13 @@ class: inverse, center, middle
 # Problem Statement 1: 
 What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
 ---
+#Reasons for investigating this problem
+- to see the development in Scottish mortality rates caused by coronary heart disease throughout the years
+- to investigate which gender and age group are more susceptible to death due to coronary heart disease
+- to investigate any changes in mortality rates, and whether there is a change from external factors (eg. improvements in healthcare services, changes in lifestyles)
+
+
+---
 #Tidying Data
 --
 ```{r}
@@ -81,6 +88,7 @@ hd_mortality_year <- hd_mortality %>%
 
 ---
 ```{r}
+#Showing the results
 hd_mortality_year
 ```
 ---
