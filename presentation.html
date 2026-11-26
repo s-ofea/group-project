@@ -4,10 +4,8 @@
     <title>Scottish Heart Diseases</title>
     <meta charset="utf-8" />
     <meta name="author" content="Asini, Tyra, Tanvee, Sofea" />
-    <meta name="date" content="2026-11-24" />
+    <meta name="date" content="2026-11-25" />
     <script src="libs/header-attrs-2.32/header-attrs.js"></script>
-    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
-    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +22,7 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
-### 2026-11-24
+### 2026-11-25
 ]
 
 ---
@@ -45,17 +43,16 @@ class: center, middle
 ## Data Analysis and Investigations on Mortality Rates in Scotland due to Coronary Heart Disease
 
 ---
-
 class: inverse, center, middle
 
 # Problem Statement 1: 
 What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
-
 ---
-class: center, middle
+#Reasons for investigating this problem
+- to see the development in Scottish mortality rates caused by coronary heart disease throughout the years
+- to investigate which gender and age group are more susceptible to death due to coronary heart disease
+- to investigate any changes in mortality rates, and whether there is a change from external factors (eg. improvements in healthcare services, changes in lifestyles)
 
-# Problem Statement 1: 
-What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
 
 ---
 #Tidying Data
@@ -63,13 +60,13 @@ What is the trend in mortality rates of each gender due to coronary heart diseas
 
 ``` r
 #Selecting necessary columns from the dataset
-hd_mortalitybyca &lt;- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
+hd_mortality &lt;- hd_mortalitybyca [, c("Year", "AgeGroup", "Sex", "Diagnosis", "NumberOfDeaths", "CrudeRate", "Ca")]
 ```
 --
 
 ``` r
 #Filtering and tidying the specific data
-hd_mortality_year &lt;- hd_mortalitybyca %&gt;% 
+hd_mortality_year &lt;- hd_mortality %&gt;% 
   filter(
   Year != "2024p", 
   Ca == "S92000003",
@@ -83,6 +80,7 @@ hd_mortality_year &lt;- hd_mortalitybyca %&gt;%
 ---
 
 ``` r
+#Showing the results
 hd_mortality_year
 ```
 
@@ -126,13 +124,12 @@ hd_mortality_year
 ## 17 S92000003
 ## 18 S92000003
 ```
---
-
 ---
 
 # Code
 
 ``` r
+#Creating a linear regression
 mortality_female_fit &lt;- linear_reg() %&gt;%
   set_engine("lm") %&gt;%
   fit(CrudeRate ~ Year, 
@@ -194,14 +191,48 @@ mortality_year_fit_aug &lt;- bind_rows(
 ```
 
 ---
-
+class: smaller-title
 # Plots
-
-
-
 &lt;img src="presentation_files/figure-html/plot-iris-1.png" alt="" width="80%" /&gt;
 
 ---
+class: smaller-title
+
+#Creating a residual plot 
+&lt;img src="presentation_files/figure-html/unnamed-chunk-8-1.png" alt="" width="80%" /&gt;
+---
+#Observations
+- 
+
+
+---
+class: inverse, center, middle
+
+# Problem Statement 2: 
+Identifying which Scottish council areas have the highest and lowest heart disease mortality,  if the gap has widened or narrowed, and why? 
+---
+#Tidying Data
+--
+
+``` r
+#Filtering data for 2015
+hd_total2015 &lt;- hd_mortalitybyca %&gt;% 
+  filter(Year == 2015, 
+         AgeGroup == "All Ages", 
+         Sex == "All",
+         Diagnosis == "Coronary Heart Disease") 
+```
+--
+
+``` r
+#
+```
+
+---
+
+---
+
+# Code
 
 ## Plot and text
 
@@ -210,7 +241,7 @@ mortality_year_fit_aug &lt;- bind_rows(
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-9-1.png" alt="" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-13-1.png" alt="" width="100%" /&gt;
 ]
 
 ---
@@ -293,40 +324,6 @@ class: inverse, center, middle
 background-image: url(img/edinburgh-castle.jpg)
 background-size: contain
 ---
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &amp;#36;\alpha+\beta$ renders `\(\alpha+\beta\)`. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-`$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$`
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcome to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
-
----
-
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
