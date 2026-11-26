@@ -84,24 +84,51 @@ ggplot(council_area_rate, aes(x = difference)) +
 
 ```{r}
 
-hd <- hd_mortalitybyca %>%
-  mutate(Year = as.integer(str_remove(Year, "p")))
-
-change_df <- hd %>%
+rate_hd <- hd_mortalitybyca %>%
   filter(Year %in% c(2015, 2023),
          AgeGroup == "All Ages", Sex == "All",
          Diagnosis == "Coronary Heart Disease",
          Ca != "S92000003") %>%
-  select(Ca, Year, EASR) %>%
-  pivot_wider(names_from = Year, values_from = EASR, names_prefix = "y") %>%
-  mutate(change = y2023 - y2015)
+  select(Ca, Year, EASR)
+  
+council_order <- rate_hd %>%
+  filter(Year == 2023) %>%
+  arrange(EASR) %>%
+  pull(Ca)
 
-ggplot(change_df, aes(x = change, y = reorder(Ca, change))) +
+rate_hd <- rate_hd %>%
+  mutate(Ca = factor(Ca, levels = council_order))
+
+ggplot(rate_hd, aes(x = EASR, y = Ca)) +
   geom_col(fill = "red") +
-  labs(title = "Change in CHD death rate by council area, 2015 to 2023",
-       subtitle = "Age-standardised rate per 100,000 (negative = improvement)",
-       x = "Change in age-standardised rate per 100,000", y = NULL) +
+  facet_wrap(~ Year) +
+  labs(title = "CHD death rate by council area, 2015 and 2023",
+       subtitle = "Age-standardised rate per 100,000",
+       x = "Age-standardised rate per 100,000", y = NULL) +
   theme_minimal()
 
+```
+```{r}
+
+
+spread_hd <- hd_mortalitybyca %>%
+  mutate(Year = as.integer(str_remove(Year, "p"))) %>%
+  filter(Year %in% c(2015, 2023),
+         AgeGroup == "All Ages", Sex == "All",
+         Diagnosis == "Coronary Heart Disease",
+         Ca != "S92000003") %>%
+  group_by(Year) %>%
+  summarise(
+    highest = max(EASR),
+    lowest  = min(EASR),
+    range   = highest - lowest,
+    sd      = sd(EASR),
+    ratio   = highest / lowest,
+    .groups = "drop"
+  )
+
+spread_hd %>% mutate(across(-Year, ~ round(.x, 1)))
+
+view(spread_hd)
 ```
 
