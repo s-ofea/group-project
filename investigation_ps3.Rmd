@@ -64,7 +64,7 @@ view(council_area_rate)
 ```{r}
 ggplot(council_area_rate, aes(x = difference)) +
   geom_histogram(
-    binwidth = 10,
+    binwidth = 15,
     fill = "skyblue",
     colour = "black"
   ) +
@@ -81,6 +81,11 @@ ggplot(council_area_rate, aes(x = difference)) +
   ) +
   theme_minimal()
 ```
+- Each bar counts how many councils fall within a 10-point band of difference from the Scotland-wide rate.
+- The red dashed line at 0 is the national rate. Councils to the left of it are below the national rate, and councils to the right are above it.
+- It's a quick way to see whether most councils sit near the national rate or spread widely around it, and whether the distribution is lopsided.
+
+From the histogram we can see...
 
 ```{r}
 rate_hd <- hd_mortalitybyca %>%
