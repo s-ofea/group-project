@@ -1,5 +1,5 @@
 
-title: ""Coronary Heart Disease Mortality Across Scottish Council Areas"
+title: "Coronary Heart Disease Mortality Across Scottish Council Areas"
 author: "by Team-Name: Tyra, Tanvee, Asini, Sofea"
 date: "`r Sys.Date()`"
 output: html_document
@@ -9,11 +9,8 @@ output: html_document
 
 As heart disease is a major health concern in Scotland, understanding the patterns of heart disease deaths across different geographical area and demographic groups can help identify health inequalities and support improvements in council area for planning healthcare and prevention strategies.
 
-This analysis follows the Data set 'Heart Disease Mortality by Council Area' published by Public Health Scotland. The data set provides information on heart disease mortality across Scottish council areas. 
+This project uses the Heart Disease Mortality by Council Area dataset, published by Public Health Scotland on the NHS Scotland Open Data portal. It records deaths from heart disease in each of Scotland's 32 council areas, plus a Scotland-wide total, for 2015 to 2024(provisional value). Each row gives the number of deaths, the crude death rate and the European age-sex standardised rate (EASR) per 100,000 population. These are broken down by diagnosis, by sex, and by age group.
 
-The aim of our investigation is to analyse patterns and differences in heart disease mortality across Scotland, focusing particularly on relationship between ages, sex and location. Data visualisation, data cleaning and regression model will be used to explore...
-
-The overall objective is to develop a better understanding of heart disease mortality and identify...
 
 
 ```{r setup, include = FALSE}
@@ -44,6 +41,12 @@ hd_mortalitybyca<- read.csv("data/hd_mortalitybyca.csv")
 
 Describe your research question here. Include why this question might be of interest. 
 
+This project focuses on coronary heart disease (CHD) and compares 2015 with 2023, the latest year with finalised figures. It asks:
+
+
+1. What is the trend in mortality rates of each gender due to coronary heart disease for those over 75 years old from 2015-2023?
+
+2. Which Scottish council areas had the highest and lowest coronary heart disease mortality rates in 2015 and 2023, and has the gap between them widened or narrowed?
 
 
 
@@ -67,9 +70,6 @@ colSums(is.na(hd))
 count(hd, Diagnosis)
 count(hd, AgeGroup)
 count(hd, Ca)
-
-hd %>% filter(AgeGroup == "All Ages", Sex == "All", Ca != "S92000003") %>%
-  ggplot(aes(CrudeRate)) + geom_histogram(bins = 30) + facet_wrap(~Diagnosis, scales = "free")
 
 hd %>% filter(Ca == "S92000003", AgeGroup == "All Ages", Sex == "All") %>%
   ggplot(aes(Year, CrudeRate, colour = Diagnosis)) + geom_line()
