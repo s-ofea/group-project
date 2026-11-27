@@ -271,4 +271,13 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 .smaller-title h1 {
   font-size: 34px;
 }
-
+.center-plot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+}
+.pull-left img {
+  max-height: 500px;
+  width: auto;
+}

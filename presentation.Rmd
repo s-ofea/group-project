@@ -1,6 +1,6 @@
 ---
 title: "Scottish Heart Diseases"
-author: "Asini, Tyra, Tanvee, Sofea"
+author: "Group 45: Asini, Tyra, Tanvee, Sofea"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
@@ -130,9 +130,9 @@ mortality_year_fit_aug <- bind_rows(
 ```
 
 ---
-class: smaller-title
 # Plots
-```{r plot-iris, echo = FALSE}
+<div class="center-plot">
+```{r plot-iris, fig.align='center', out.width='75%', echo = FALSE}
 ggplot(data = mortality_year_fit_aug) + 
  geom_point(aes(x = Year, y = CrudeRate, color = residual)) +
   geom_line(aes(x = Year, y = .fitted), linewidth = 0.75) +
@@ -149,26 +149,28 @@ ggplot(data = mortality_year_fit_aug) +
   theme_minimal() +
   scale_colour_manual(values = c("hotpink", "forestgreen")) 
 ```
+
 ---
 #Observations
 .pull-left[
-## General
+### General
 - Overall, a downward trend in CHD mortality rates among people aged 75+ years old in Scotland, due to the negative sloping graphs
 - CHD decreased by 26.4 deaths per 100,000 people annually
 ]
 
 .pull-right[
-##Male
+### Male
 - decrease of 19.6 per 100,000 people annually 
 - 76.5% of variation in mortality rates is explained by YEAR
-##Female
+### Female
 - 85.2% of variation in mortality rates is explained by YEAR
 ]
----
-class: smaller-title
 
+---
+class: centre
 #Creating a residual plot 
-```{r, echo=FALSE}
+.pull-left[
+```{r, fig.width=8, fig.height=5, out.width="100%", echo=FALSE}
 ggplot(mortality_year_fit_aug, aes(x = .fitted, y = .resid, colour = Sex)) +
   geom_point() +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "darkgray") +
@@ -181,14 +183,16 @@ ggplot(mortality_year_fit_aug, aes(x = .fitted, y = .resid, colour = Sex)) +
   facet_wrap(~Sex, scales = "free", axes = "all") +
   theme_minimal()
 ```
----
-#Observations
+] 
+
+.pull-right[
+###Observations
 Female Residual Plot 
-- 
 
-Male Residual Plots 
-- 
 
+Male Residual Plot
+- 
+]
 ---
 #General Limitations of the Model 
 .pull-left[
