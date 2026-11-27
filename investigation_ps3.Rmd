@@ -53,7 +53,7 @@ hd_councils <- hd_total2015 %>%
          status = if_else(CrudeRate > national_rate, "Above national", "Below national")) 
 
 council_area_rate <- hd_councils %>% 
-  select(national_rate, CrudeRate, difference, status, Ca) 
+  select(national_rate, CrudeRate, difference, status, Ca, EASR) 
 
 view(council_area_rate) 
 
