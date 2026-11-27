@@ -93,23 +93,22 @@ rate_hd <- hd_mortalitybyca %>%
          AgeGroup == "All Ages", Sex == "All",
          Diagnosis == "Coronary Heart Disease",
          Ca != "S92000003") %>%
-  select(Ca, Year, EASR)
+  select(Ca, Year, CrudeRate)
 
 
 council_order <- rate_hd %>%
   filter(Year == 2023) %>%
-  arrange(EASR) %>%
+  arrange(CrudeRate) %>%
   pull(Ca)
 
 rate_hd <- rate_hd %>%
   mutate(Ca = factor(Ca, levels = council_order))
 
-ggplot(rate_hd, aes(x = EASR, y = Ca)) +
+ggplot(rate_hd, aes(x = CrudeRate, y = Ca)) +
   geom_col(fill = "red") +
   facet_wrap(~ Year) +
   labs(title = "CHD death rate by council area, 2015 and 2023",
-       subtitle = "Age-standardised rate per 100,000",
-       x = "Age-standardised rate per 100,000", y = NULL) +
+       x = "Crude Rate", y = NULL) +
   theme_minimal()
 
 ```
@@ -124,10 +123,10 @@ spread_hd <- hd_mortalitybyca %>%
          Ca != "S92000003") %>%
   group_by(Year) %>%
   summarise(
-    highest = max(EASR),
-    lowest  = min(EASR),
+    highest = max(CrudeRate),
+    lowest  = min(CrudeRate),
     range   = highest - lowest,
-    sd      = sd(EASR),
+    sd      = sd(CrudeRate),
     ratio   = highest / lowest,
     .groups = "drop"
   )
