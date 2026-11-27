@@ -53,7 +53,7 @@ hd_councils <- hd_total2015 %>%
          status = if_else(CrudeRate > national_rate, "Above national", "Below national")) 
 
 council_area_rate <- hd_councils %>% 
-  select(national_rate, difference, status, Ca) 
+  select(national_rate, CrudeRate, difference, status, Ca) 
 
 view(council_area_rate) 
 
@@ -83,14 +83,14 @@ ggplot(council_area_rate, aes(x = difference)) +
 ```
 
 ```{r}
-
 rate_hd <- hd_mortalitybyca %>%
   filter(Year %in% c(2015, 2023),
          AgeGroup == "All Ages", Sex == "All",
          Diagnosis == "Coronary Heart Disease",
          Ca != "S92000003") %>%
   select(Ca, Year, EASR)
-  
+
+
 council_order <- rate_hd %>%
   filter(Year == 2023) %>%
   arrange(EASR) %>%
