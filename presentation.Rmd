@@ -149,7 +149,21 @@ ggplot(data = mortality_year_fit_aug) +
   theme_minimal() +
   scale_colour_manual(values = c("hotpink", "forestgreen")) 
 ```
+---
+#Observations
+.pull-left[
+## General
+- Overall, a downward trend in CHD mortality rates among people aged 75+ years old in Scotland, due to the negative sloping graphs
+- CHD decreased by 26.4 deaths per 100,000 people annually
+]
 
+.pull-right[
+##Male
+- decrease of 19.6 per 100,000 people annually 
+- 76.5% of variation in mortality rates is explained by YEAR
+##Female
+- 85.2% of variation in mortality rates is explained by YEAR
+]
 ---
 class: smaller-title
 
@@ -169,9 +183,33 @@ ggplot(mortality_year_fit_aug, aes(x = .fitted, y = .resid, colour = Sex)) +
 ```
 ---
 #Observations
+Female Residual Plot 
 - 
 
+Male Residual Plots 
+- 
 
+---
+#General Limitations of the Model 
+.pull-left[
+Small Sample Size 
+- 9 observed annual points
+- not likely to establish an evaluation
+
+Accuracy due to limited time period 
+- high risk of extrapolation 
+- models are good to highlight historical trends, but has uncertainty due to a low sample size 
+]
+
+
+.pull-right[
+Relationship between the years 
+- relationship between the years before is unknown (i.e. whether the year's result is due to previous years')
+
+Unstandardized rates
+- there is no information on the distribution of the ages withing the age bracket 
+- i.e. 1 75 year old and 100 90 year olds (very skewed)
+]
 ---
 class: inverse, center, middle
 
